@@ -100,6 +100,9 @@ static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot, Matrix *operan
             if (f != NULL) {
                 mul_sub_row(f, i, j, coefficient);
             }
+            if (operand != NULL) {
+                mul_sub_row(operand, i, j, coefficient);
+            }
         }
 
 #ifdef PRINT_MATRIX_ELIMINATION_ITERATIONS
