@@ -5,7 +5,7 @@
 
 Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot);
 
-data_t calc_determinant(Matrix *a, _Bool use_pivot);
+data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status);
 
 Matrix *calc_inverse(Matrix *a);
 
