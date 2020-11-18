@@ -47,15 +47,24 @@ mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c)
 void
 print_matrix(FILE *file, Matrix *matrix)
 {
+#ifdef PRINT_MATRIX_HUMAN_READABLE
+    for (size_t i = 0; i < matrix->row; i++) {
+        for (size_t j = 0; j < matrix->col; j++) {
+            fprintf(file, "%10.2" PR_DATA_T " ", matrix->values[j + matrix->col * i]);
+        }
+        fputs("\n", file);
+    }
+#else
     fputs("{", file);
     for (size_t i = 0; i < matrix->row; i++) {
         fputs("{", file);
         for (size_t j = 0; j < matrix->col; j++) {
-            fprintf(file, "%.2" PR_DATA_T "%s", matrix->values[j + matrix->col * i],
+            fprintf(file, "%" PR_DATA_T "%s", matrix->values[j + matrix->col * i],
                     j != matrix-> col - 1 ? ", " : "");
         }
         fputs(i != matrix->row - 1 ? "}," : "}", file);
     }
     fputs("}\n", file);
+#endif
 }
 
