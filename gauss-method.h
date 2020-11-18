@@ -25,6 +25,6 @@ typedef struct {
  * @param options structure specifying calculations to be performed
  * @return GaussSolutionContainer. NULL if an error happened or dimensions of matrices are incorrect
  */
-GaussSolutionContainer *gauss_solve(Matrix *a, Matrix *f, GaussSolverOptions *options);
+GaussSolutionContainer *o_gauss_solve(Matrix *a, Matrix *f, GaussSolverOptions *options);
 
 #endif //LE_SOLVER_GAUSS_METHOD_H

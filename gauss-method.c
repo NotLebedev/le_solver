@@ -39,7 +39,7 @@ int eq_zero(data_t d)
 }
 
 GaussSolutionContainer *
-gauss_solve(Matrix *a, Matrix *f, GaussSolverOptions *options)
+o_gauss_solve(Matrix *a, Matrix *f, GaussSolverOptions *options)
 {
     if (a == NULL || options == NULL || (options->solve_system && f == NULL) || a->col != a->row
             || (f != NULL && a->row != f->row)) {
