@@ -142,6 +142,7 @@ Matrix *calc_inverse(Matrix *a, int *status) {
         }
     }
 
+    *status = OK;
     return res;
 }
 
