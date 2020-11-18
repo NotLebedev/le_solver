@@ -25,6 +25,8 @@ void set_element(Matrix *matrix, size_t row, size_t col, data_t val);
  */
 void mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c);
 
+void swap_row(Matrix *matrix, size_t s, size_t d);
+
 void print_matrix(FILE *file, Matrix *matrix);
 
 #endif //LE_SOLVER_MATRIX_H

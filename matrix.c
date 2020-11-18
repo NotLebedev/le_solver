@@ -78,3 +78,15 @@ print_matrix(FILE *file, Matrix *matrix)
 #endif
 }
 
+void swap_row(Matrix *matrix, size_t s, size_t d) {
+#ifdef ASSERT_MATRIX_RANGES
+    assert(s < matrix->row);
+    assert(d < matrix->row);
+#endif
+    for (size_t i = 0; i < matrix->col; i++) {
+        data_t tmp = matrix->values[i + d * matrix->col];
+        matrix->values[i + d * matrix->col] = matrix->values[i + s * matrix->col];
+        matrix->values[i + s * matrix->col] = tmp;
+    }
+}
+
