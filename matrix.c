@@ -33,6 +33,16 @@ get_element(Matrix *matrix, size_t row, size_t col)
 }
 
 void
+set_element(Matrix *matrix, size_t row, size_t col, data_t val)
+{
+#ifdef ASSERT_MATRIX_RANGES
+    assert(row < matrix->row);
+    assert(col < matrix->col);
+#endif
+    matrix->values[col + matrix->col * row] = val;
+}
+
+void
 mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c)
 {
 #ifdef ASSERT_MATRIX_RANGES
