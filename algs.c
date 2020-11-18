@@ -38,6 +38,8 @@ data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
         return 0.0;
     }
 
+    a = copy_matrix(a); // Копия для преобразований
+
     size_t *col_order = elimination(a, NULL, use_pivot);
     if (col_order == NULL) {
         *status = ALLOC_FAILED;
@@ -56,6 +58,7 @@ data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
 
     *status = OK;
     free(col_order);
+    free_matrix(a);
     return det;
 }
 
@@ -64,6 +67,9 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
         *status = INCORRECT_ARGS;
         return NULL;
     }
+
+    a = copy_matrix(a); // Копии для преобразований
+    f = copy_matrix(f);
 
     size_t *col_order = elimination(a, f, use_pivot);
     if (col_order == NULL) {
@@ -89,6 +95,8 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
         set_element(answ, col_order[i - 1], 0, acc / get_element(a, i - 1, col_order[i - 1]));
     }
 
+    free_matrix(a);
+    free_matrix(f);
     return answ;
 }
 
@@ -97,6 +105,8 @@ Matrix *calc_inverse(Matrix *a, int *status) {
         *status = INCORRECT_ARGS;
         return NULL;
     }
+
+    a = copy_matrix(a); // Копия для преобразований
 
     // Создаём присоединёную единичную матрицу
     Matrix *res = new_matrix(a->row, a->col);
@@ -143,6 +153,7 @@ Matrix *calc_inverse(Matrix *a, int *status) {
     }
 
     *status = OK;
+    free_matrix(a);
     return res;
 }
 
@@ -151,13 +162,10 @@ data_t matrix_norm(Matrix *a);
 data_t calc_condition_number(Matrix *a, int *status)
 {
     data_t norm = matrix_norm(a);
-    fprintf(stderr, "Norm(A) = %" PR_DATA_T "\n", norm);
     Matrix *inverse = calc_inverse(a, status);
-    print_matrix(stderr, inverse);
     if (*status != OK) {
         return 0.0;
     }
-    fprintf(stderr, "Norm(A) = %" PR_DATA_T "\n", matrix_norm(inverse));
     return norm * matrix_norm(inverse);
 }
 
