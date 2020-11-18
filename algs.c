@@ -146,6 +146,37 @@ Matrix *calc_inverse(Matrix *a, int *status) {
     return res;
 }
 
+data_t matrix_norm(Matrix *a);
+
+data_t calc_condition_number(Matrix *a, int *status)
+{
+    data_t norm = matrix_norm(a);
+    fprintf(stderr, "Norm(A) = %" PR_DATA_T "\n", norm);
+    Matrix *inverse = calc_inverse(a, status);
+    print_matrix(stderr, inverse);
+    if (*status != OK) {
+        return 0.0;
+    }
+    fprintf(stderr, "Norm(A) = %" PR_DATA_T "\n", matrix_norm(inverse));
+    return norm * matrix_norm(inverse);
+}
+
+data_t matrix_norm(Matrix *a)
+{
+    data_t max = 0.0;
+    for (size_t i = 0; i < a->row; i++) {
+        data_t sum = 0.0;
+        for (size_t j = 0; j < a->col; j++) {
+            sum += fabs(get_element(a, i, j));
+        }
+
+        if (sum > max) {
+            max = sum;
+        }
+    }
+    return max;
+}
+
 static size_t max_row_element(Matrix *a, const _Bool *cols_eliminated, size_t row);
 static size_t nonzero_row_element(Matrix *a, const _Bool *cols_eliminated, size_t row);
 
