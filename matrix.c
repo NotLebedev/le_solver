@@ -68,7 +68,7 @@ print_matrix(FILE *file, Matrix *matrix)
 #ifdef PRINT_MATRIX_HUMAN_READABLE
     for (size_t i = 0; i < matrix->row; i++) {
         for (size_t j = 0; j < matrix->col; j++) {
-            fprintf(file, "%10.2" PR_DATA_T " ", matrix->values[j + matrix->col * i]);
+            fprintf(file, "%10.5" PR_DATA_T " ", matrix->values[j + matrix->col * i]);
         }
         fputs("\n", file);
     }
