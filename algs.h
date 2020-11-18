@@ -3,7 +3,7 @@
 
 #include "matrix.h"
 
-Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot);
+Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status);
 
 data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status);
 

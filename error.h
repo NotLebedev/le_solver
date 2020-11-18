@@ -4,7 +4,8 @@
 enum
 {
     OK = 0,
-    ALLOC_FAILED
+    ALLOC_FAILED,
+    INCORRECT_ARGS
 };
 
 #endif //LE_SOLVER_ERROR_H

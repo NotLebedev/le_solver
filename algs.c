@@ -50,7 +50,44 @@ data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
     }
 
     *status = OK;
+    free(col_order);
     return det;
+}
+
+Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
+    if (a == NULL  || a->col != a->row || f == NULL) {
+#ifdef ASSERT_INCORRECT_ARGUMENTS
+        fprintf(stderr, "Incorrect arguments passed to function gauss_solve\n");
+#endif
+        *status = INCORRECT_ARGS;
+        return NULL;
+    }
+
+    size_t *col_order = elimination(a, f, use_pivot);
+    if (col_order == NULL) {
+        *status = ALLOC_FAILED;
+        return NULL;
+    }
+
+    Matrix *answ = new_matrix(f->row, 1);
+    if (answ == NULL) {
+        *status = ALLOC_FAILED;
+        free(col_order);
+        return NULL;
+    }
+
+    // Обратный ход метода Гаусса
+    for (size_t i = a->row; i > 0; i--) {
+        data_t acc = get_element(f, i - 1, 0); // Находим сумму для всех найденных неизвестных и свободного члена
+        for (size_t j = i; j < a->col; j++) {
+            size_t col = col_order[j];
+            acc -= get_element(a, i - 1, col) * get_element(answ, col, 0);
+        }
+
+        set_element(answ, col_order[i - 1], 0, acc / get_element(a, i - 1, col_order[i - 1]));
+    }
+
+    return answ;
 }
 
 static size_t max_row_element(Matrix *a, const _Bool *cols_eliminated, size_t row);
@@ -80,8 +117,8 @@ static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot)
         for (size_t j = i + 1; j < a->row; j++) {
             data_t coefficient = - get_element(a, j, pivot) / pivot_value;
             mul_sub_row(a, i, j, coefficient);
-            if (f != NULL) {
-                mul_sub_row(f, i, j, coefficient);
+            if (f != NULL) { // Функция может использоваться для вычисления определителя и тогда столбец свободных
+                mul_sub_row(f, i, j, coefficient); // членов будет отсутствовать
             }
         }
 
