@@ -90,6 +90,62 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
     return answ;
 }
 
+Matrix *calc_inverse(Matrix *a, int *status) {
+    if (a == NULL  || a->col != a->row) {
+#ifdef ASSERT_INCORRECT_ARGUMENTS
+        fprintf(stderr, "Incorrect arguments passed to function calc_inverse\n");
+#endif
+        *status = INCORRECT_ARGS;
+        return NULL;
+    }
+
+    // Создаём присоединёную единичную матрицу
+    Matrix *res = new_matrix(a->row, a->col);
+    if (res == NULL) {
+        *status = ALLOC_FAILED;
+        return NULL;
+    }
+    for (size_t i = 0; i < a->row; i++) {
+        set_element(res, i, i, 1.0);
+    }
+
+    // В силу того, что алгоритм прямого хода метода Гаусса в функции elemination использует фиктивную перестановку
+    // столбцов он не слишком удобен для нахождения обратной матрицы и не даёт выигрыша в производительности
+    // потому используется другая реализация прямого хода
+    for (size_t i = 0; i < a->row; i++) {
+        if (eq_zero(get_element(a, i, i))) { // Диагональный элемент необходимо выбрать ненулевым
+            for (size_t j = i + 1; j < a->row; j++) {
+                if (!eq_zero(get_element(a, j, i))) { // Находим строку с ненулевым элементом
+                    swap_row(a, i, j); // Меняем текущую строку с найденной в обеих матрицах
+                    swap_row(res, i, j);
+                }
+            }
+        }
+        mul_row(res, i, 1.0 / get_element(a, i, i)); // Делим строку обеих матриц на диагональный элемент
+        mul_row(a, i, 1.0 / get_element(a, i, i));
+        for (size_t j = i + 1; j < a->row; j++) {
+            mul_sub_row(res, i, j, -get_element(a, j, i)); // Вычитаем из всех последующих строк обеих матриц данную
+            mul_sub_row(a, i, j, -get_element(a, j, i)); // домноженную на необходимый коэффициент
+        }
+#ifdef PRINT_MATRIX_ELIMINATION_ITERATIONS
+        print_matrix(stderr, a);
+        fputs("\n", stderr);
+        print_matrix(stderr, res);
+        fputs("--------------------------------\n", stderr);
+#endif
+    }
+
+    // Обратный ход, вычитаем из всех предыдущих строк обеих матриц текущую, домноженную на необходимый коэффициент
+    for (size_t i = a->row; i > 0; i--) {
+        for (size_t j = i - 1; j > 0; j--) {
+            mul_sub_row(res, i - 1, j - 1, -get_element(a, j - 1, i - 1));
+            mul_sub_row(a, i - 1, j - 1, -get_element(a, j - 1, i - 1));
+        }
+    }
+
+    return res;
+}
+
 static size_t max_row_element(Matrix *a, const _Bool *cols_eliminated, size_t row);
 static size_t nonzero_row_element(Matrix *a, const _Bool *cols_eliminated, size_t row);
 
