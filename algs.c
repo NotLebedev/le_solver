@@ -33,6 +33,11 @@ static int eq_zero(data_t d)
 }
 
 data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
+    if (a == NULL  || a->col != a->row) {
+        *status = INCORRECT_ARGS;
+        return 0.0;
+    }
+
     size_t *col_order = elimination(a, NULL, use_pivot);
     if (col_order == NULL) {
         *status = ALLOC_FAILED;
@@ -56,9 +61,6 @@ data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
 
 Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
     if (a == NULL  || a->col != a->row || f == NULL) {
-#ifdef ASSERT_INCORRECT_ARGUMENTS
-        fprintf(stderr, "Incorrect arguments passed to function gauss_solve\n");
-#endif
         *status = INCORRECT_ARGS;
         return NULL;
     }
@@ -92,9 +94,6 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
 
 Matrix *calc_inverse(Matrix *a, int *status) {
     if (a == NULL  || a->col != a->row) {
-#ifdef ASSERT_INCORRECT_ARGUMENTS
-        fprintf(stderr, "Incorrect arguments passed to function calc_inverse\n");
-#endif
         *status = INCORRECT_ARGS;
         return NULL;
     }
