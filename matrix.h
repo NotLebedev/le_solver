@@ -18,7 +18,7 @@ Matrix *new_matrix(size_t row, size_t col);
 void free_matrix(Matrix *matrix);
 
 data_t get_element(Matrix *matrix, size_t row, size_t col);
-void set_element(Matrix *matrix, size_t row, size_t col, data_t val)
+void set_element(Matrix *matrix, size_t row, size_t col, data_t val);
 /**
  * Прибавить к строке d матрицы a строку s, умноженную на c
  * @param matrix матрица для преобразования
