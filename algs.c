@@ -41,8 +41,8 @@ data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
 
     data_t det = 1.0;
     for (size_t i = 0; i < a->row; i++) {
-        det *= get_element(a, i, col_order[i]);
-        for (size_t j = 0; j < i; j++) { // Multiply by (-1)^(number of inversions)
+        det *= get_element(a, i, col_order[i]); // Перемножаем диагональные с точности до перестановки столбцов элементы
+        for (size_t j = 0; j < i; j++) { // Домножаем на (-1)^(количество инверсий)
             if (col_order[j] > col_order[i]) {
                 det *= -1.0;
             }
@@ -95,23 +95,27 @@ static size_t nonzero_row_element(Matrix *a, const _Bool *cols_eliminated, size_
 
 static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot)
 {
-    size_t *col_order = calloc(a->col, sizeof(*col_order));
+    size_t *col_order = calloc(a->col, sizeof(*col_order));// Чтобы исбежать дополнительных вычислений вместо перестановки
+    // столбцов при выборе главного элемента или в случае 0 диагонального сохраняется дополнительный массив с порядком
+    // перестановки столбцов
     if (col_order == NULL) {
         return NULL;
     }
-    _Bool *cols_eliminated = calloc(a->col, sizeof(*cols_eliminated));
+    _Bool *cols_eliminated = calloc(a->col, sizeof(*cols_eliminated)); // Также сохраняем информацию о том, какие
+    // столбцы были уже занулены каждом шаге
     if (cols_eliminated == NULL) {
         free(col_order);
         return NULL;
     }
     for (size_t i = 0; i < a->row ; i++) {
-        size_t pivot = use_pivot ? max_row_element(a, cols_eliminated, i) :
-                       nonzero_row_element(a, cols_eliminated, i);
+        size_t pivot = use_pivot ? max_row_element(a, cols_eliminated, i) : // В зависимости от режима работы
+                       nonzero_row_element(a, cols_eliminated, i); // выбирается либо максимальный элемент либо первый
+                       // ненулевой в строке
         col_order[i] = pivot;
         cols_eliminated[pivot] = 1;
         data_t pivot_value = get_element(a, i, pivot);
         if (eq_zero(pivot_value)) {
-            continue; // A row of all exactly zeroes should be skipped
+            continue; // Если в качестве опорного эемента был выбран 0, то вся строка состоит из нулей и пропускается
         }
 
         for (size_t j = i + 1; j < a->row; j++) {
