@@ -90,3 +90,12 @@ void swap_row(Matrix *matrix, size_t s, size_t d) {
     }
 }
 
+void mul_row(Matrix *matrix, size_t row, data_t c) {
+#ifdef ASSERT_MATRIX_RANGES
+    assert(row < matrix->row);
+#endif
+    for (size_t i = 0; i < matrix->col; i++) {
+        matrix->values[i + row * matrix->col] *= c;
+    }
+}
+
