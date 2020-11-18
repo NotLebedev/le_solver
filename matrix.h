@@ -16,6 +16,7 @@ typedef struct
 
 Matrix *new_matrix(size_t row, size_t col);
 void free_matrix(Matrix *matrix);
+Matrix *copy_matrix(Matrix *matrix);
 
 data_t get_element(Matrix *matrix, size_t row, size_t col);
 void set_element(Matrix *matrix, size_t row, size_t col, data_t val);

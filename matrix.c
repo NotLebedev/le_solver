@@ -22,6 +22,12 @@ free_matrix(Matrix *matrix)
     free(matrix);
 }
 
+Matrix *copy_matrix(Matrix *matrix) {
+    Matrix *copy = new_matrix(matrix->row, matrix->col);
+    *copy = *matrix;
+    return copy;
+}
+
 data_t
 get_element(Matrix *matrix, size_t row, size_t col)
 {
@@ -98,4 +104,3 @@ void mul_row(Matrix *matrix, size_t row, data_t c) {
         matrix->values[i + row * matrix->col] *= c;
     }
 }
-
