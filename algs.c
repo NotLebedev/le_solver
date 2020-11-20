@@ -79,10 +79,7 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
         return NULL;
     }
 
-    a = copy_matrix(a); // Копии для преобразований
-    f = copy_matrix(f);
-
-    size_t *col_order = elimination(a, f, use_pivot);
+    size_t *col_order = elimination(a, f, use_pivot); // Выполняем прямой ход метода Гаусса
     if (col_order == NULL) {
         *status = ALLOC_FAILED;
         free_matrix(a);
@@ -105,7 +102,7 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
             size_t col = col_order[j];
             acc -= get_element(a, i - 1, col) * get_element(answ, col, 0);
         }
-
+        // Вычисляем неизвестную и записываем в вектор-столбец ответа
         set_element(answ, col_order[i - 1], 0, acc / get_element(a, i - 1, col_order[i - 1]));
     }
 
@@ -134,8 +131,8 @@ Matrix *calc_inverse(Matrix *a, int *status) {
         set_element(res, i, i, 1.0);
     }
 
-    // В силу того, что алгоритм прямого хода метода Гаусса в функции elemination использует фиктивную перестановку
-    // столбцов он не слишком удобен для нахождения обратной матрицы и не даёт выигрыша в производительности
+    // В силу того, что алгоритм прямого хода метода Гаусса в функции elimination использует фиктивную перестановку
+    // столбцов он не слишком удобен для нахождения обратной матрицы и не даёт выигрыша в производительности,
     // потому используется другая реализация прямого хода
     for (size_t i = 0; i < a->row; i++) {
         if (eq_zero(get_element(a, i, i))) { // Диагональный элемент необходимо выбрать ненулевым
@@ -177,9 +174,10 @@ data_t matrix_norm(Matrix *a);
 
 data_t calc_condition_number(Matrix *a, int *status)
 {
+    // Вычисляем число обусловленности как ||A|| * ||A^-1||
     data_t norm = matrix_norm(a);
     Matrix *inverse = calc_inverse(a, status);
-    if (*status != OK) {
+    if (*status != OK) { // Не удалось вычислить обратную матрицу
         return 0.0;
     }
     return norm * matrix_norm(inverse);
@@ -188,12 +186,14 @@ data_t calc_condition_number(Matrix *a, int *status)
 data_t matrix_norm(Matrix *a)
 {
     data_t max = 0.0;
+    // Матричная норма ||A||_1
     for (size_t i = 0; i < a->row; i++) {
-        data_t sum = 0.0;
+        data_t sum = 0.0; // Находим сумму модулей элементов строки
         for (size_t j = 0; j < a->col; j++) {
             sum += fabs(get_element(a, i, j));
         }
 
+        // Проверям на максимальность и перезаписываем
         if (sum > max) {
             max = sum;
         }
@@ -206,9 +206,9 @@ static size_t nonzero_row_element(Matrix *a, const _Bool *cols_eliminated, size_
 
 static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot)
 {
-    size_t *col_order = calloc(a->col, sizeof(*col_order));// Чтобы исбежать дополнительных вычислений вместо перестановки
-    // столбцов при выборе главного элемента или в случае 0 диагонального сохраняется дополнительный массив с порядком
-    // перестановки столбцов
+    size_t *col_order = calloc(a->col, sizeof(*col_order));// Чтобы исбежать дополнительных вычислений вместо
+    // перестановки столбцов при выборе главного элемента или в случае 0 диагонального сохраняется
+    // дополнительный массив с порядком перестановки столбцов
     if (col_order == NULL) {
         return NULL;
     }
@@ -222,15 +222,15 @@ static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot)
         size_t pivot = use_pivot ? max_row_element(a, cols_eliminated, i) : // В зависимости от режима работы
                        nonzero_row_element(a, cols_eliminated, i); // выбирается либо максимальный элемент либо первый
                        // ненулевой в строке
-        col_order[i] = pivot;
-        cols_eliminated[pivot] = 1;
+        col_order[i] = pivot; // Записывем номер стобца в массив с порядком перестановки
+        cols_eliminated[pivot] = 1; // Помечаем, что столбец был занулён
         data_t pivot_value = get_element(a, i, pivot);
         if (eq_zero(pivot_value)) {
             continue; // Если в качестве опорного эемента был выбран 0, то вся строка состоит из нулей и пропускается
         }
 
-        for (size_t j = i + 1; j < a->row; j++) {
-            data_t coefficient = - get_element(a, j, pivot) / pivot_value;
+        for (size_t j = i + 1; j < a->row; j++) { // Из всех последующих строк вычитаем данную
+            data_t coefficient = - get_element(a, j, pivot) / pivot_value; //  с необходимым коэффициентом
             mul_sub_row(a, i, j, coefficient);
             if (f != NULL) { // Функция может использоваться для вычисления определителя и тогда столбец свободных
                 mul_sub_row(f, i, j, coefficient); // членов будет отсутствовать
@@ -259,7 +259,7 @@ static size_t max_row_element(Matrix *a, const _Bool *cols_eliminated, size_t ro
     for (size_t i = 0; i < a->col; i++) {
         data_t element = get_element(a, row, i);
         if (!cols_eliminated[i] && (!has_max || fabs(element) > max)) {
-            max = fabs(element);
+            max = fabs(element); // Максимальный элемент выбирается по модулю
             max_idx = i;
             has_max = 1;
         }
