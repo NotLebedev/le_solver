@@ -25,6 +25,9 @@ free_matrix(Matrix *matrix)
 
 Matrix *copy_matrix(Matrix *matrix) {
     Matrix *copy = new_matrix(matrix->row, matrix->col);
+    if (copy == NULL) {
+        return NULL;
+    }
     *copy = *matrix;
     memcpy(copy->values, matrix->values, matrix->col * matrix->row * sizeof(*(copy->values)));
     return copy;

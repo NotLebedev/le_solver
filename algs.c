@@ -37,12 +37,14 @@ data_t calc_determinant(Matrix *a, _Bool use_pivot, int *status) {
         *status = INCORRECT_ARGS;
         return 0.0;
     }
-
-    a = copy_matrix(a); // Копия для преобразований
-
+    if ((a = copy_matrix(a)) == NULL) { // Копия для преобразований
+        *status = ALLOC_FAILED;
+        return 0.0;
+    }
     size_t *col_order = elimination(a, NULL, use_pivot);
     if (col_order == NULL) {
         *status = ALLOC_FAILED;
+        free_matrix(a);
         return 0.0;
     }
 
@@ -67,6 +69,15 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
         *status = INCORRECT_ARGS;
         return NULL;
     }
+    if ((a = copy_matrix(a)) == NULL) { // Копии для преобразований
+        *status = ALLOC_FAILED;
+        return NULL;
+    }
+    if ((f = copy_matrix(f)) == NULL) {
+        *status = ALLOC_FAILED;
+        free_matrix(a);
+        return NULL;
+    }
 
     a = copy_matrix(a); // Копии для преобразований
     f = copy_matrix(f);
@@ -74,13 +85,16 @@ Matrix *gauss_solve(Matrix *a, Matrix *f, _Bool use_pivot, int *status) {
     size_t *col_order = elimination(a, f, use_pivot);
     if (col_order == NULL) {
         *status = ALLOC_FAILED;
+        free_matrix(a);
+        free_matrix(f);
         return NULL;
     }
-
     Matrix *answ = new_matrix(f->row, 1);
     if (answ == NULL) {
         *status = ALLOC_FAILED;
         free(col_order);
+        free_matrix(a);
+        free_matrix(f);
         return NULL;
     }
 
@@ -105,13 +119,15 @@ Matrix *calc_inverse(Matrix *a, int *status) {
         *status = INCORRECT_ARGS;
         return NULL;
     }
-
-    a = copy_matrix(a); // Копия для преобразований
-
+    if ((a = copy_matrix(a)) == NULL) { // Копия для преобразований
+        *status = ALLOC_FAILED;
+        return NULL;
+    }
     // Создаём присоединёную единичную матрицу
     Matrix *res = new_matrix(a->row, a->col);
     if (res == NULL) {
         *status = ALLOC_FAILED;
+        free_matrix(a);
         return NULL;
     }
     for (size_t i = 0; i < a->row; i++) {
