@@ -127,3 +127,17 @@ Matrix *matrix_mul(Matrix *a, Matrix *b) {
     }
     return res;
 }
+
+Matrix *transpose(Matrix *matrix) {
+    Matrix *res = new_matrix(matrix->col, matrix->row);
+    if (res == NULL) {
+        return NULL;
+    }
+
+    for (size_t i = 0; i < res->row; i++) {
+        for (size_t j = 0; j < res->col; j++) {
+            res->values[j + res->col * i] = matrix->values[i + matrix->col * j];
+        }
+    }
+    return res;
+}
