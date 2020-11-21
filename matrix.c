@@ -109,3 +109,21 @@ void mul_row(Matrix *matrix, size_t row, data_t c) {
         matrix->values[i + row * matrix->col] *= c;
     }
 }
+
+Matrix *matrix_mul(Matrix *a, Matrix *b) {
+#ifdef ASSERT_MATRIX_RANGES
+    assert(a->col == b->row);
+#endif
+    Matrix *res = new_matrix(a->row, b->col);
+    if (res == NULL) {
+        return NULL;
+    }
+    for (size_t i = 0; i < a->row; i++) {
+        for (size_t j = 0; j < b->col; j++) {
+            for (size_t k = 0; k < a->col; k++) {
+                res->values[j + res->col * i] += a->values[k + a->col * i] * b->values[j + b->col * k];
+            }
+        }
+    }
+    return res;
+}
