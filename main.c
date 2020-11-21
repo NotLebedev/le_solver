@@ -21,7 +21,9 @@ main(void)
         f->values[i] = (double)rand() / RAND_MAX * 10.0 - 5.0;
     }
 
+    printf("Матрица системы :\n");
     print_matrix(stdout, a);
+    printf("\nМатрица-столбец коэффициентов :\n");
     print_matrix(stdout, f);
 
     int status;
