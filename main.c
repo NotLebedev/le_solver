@@ -1,22 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 #include "matrix.h"
 #include "algs.h"
+#include "relaxation.h"
 
 int
 main(void)
 {
     srand (13);
-
-    Matrix *a = new_matrix(5, 5);
+    Matrix *a = new_matrix(4, 4);
     for (size_t i = 0; i < a->row; i++) {
         for (size_t j = 0; j < a->col; j++) {
             a->values[j + a->col * i] = (double)rand() / RAND_MAX * 10.0 - 5.0;
         }
     }
 
-    Matrix *f = new_matrix(5, 1);
+    Matrix *f = new_matrix(4, 1);
     for (size_t i = 0; i < a->row; i++) {
         f->values[i] = (double)rand() / RAND_MAX * 10.0 - 5.0;
     }
@@ -44,6 +45,10 @@ main(void)
     printf("\nОпределитель вычисленный без выбора главного элемента : %" PR_DATA_T "\n", det);
     printf("Оперделитель вычисленный с выбором главного элемента : %" PR_DATA_T "\n", det_pivot);
     printf("Число обусловленности : %" PR_DATA_T "\n", condition_number);
+
+
+    size_t iter = 0;
+    print_matrix(stdout, relaxation(a, f, 1, 1e-10, &iter, &status));
 
     free_matrix(a);
     free_matrix(f);
