@@ -2,7 +2,6 @@
 #include <string.h>
 
 #include "matrix.h"
-#include "debug.h"
 
 Matrix *new_matrix(size_t row, size_t col) {
     Matrix *matrix = calloc(1, sizeof(*matrix) + sizeof(data_t) * row * col);

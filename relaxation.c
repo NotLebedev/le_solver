@@ -40,7 +40,7 @@ Matrix *relaxation(Matrix *a, Matrix *f, data_t omega, data_t precision, size_t 
     }
 
     *iters = 0;
-    data_t distance_squared = 0.0;
+    data_t distance_squared;
     do {
         distance_squared = 0.0; // Аккумулируем расстояние между векторами двух итераций нахождения решения
         for (size_t i = 0; i < a->row; i++) {

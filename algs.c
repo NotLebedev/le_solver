@@ -220,7 +220,7 @@ static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot)
 
 static size_t max_row_element(Matrix *a, const _Bool *cols_eliminated, size_t row)
 {
-    data_t max;
+    data_t max = -1e300;
     size_t max_idx = 0;
     _Bool has_max = 0;
     for (size_t i = 0; i < a->col; i++) {
