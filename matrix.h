@@ -27,6 +27,8 @@ void swap_row(Matrix *matrix, size_t s, size_t d);
 
 Matrix *matrix_mul(Matrix *a, Matrix *b);
 Matrix *transpose(Matrix *matrix);
+data_t distance(Matrix *a, Matrix *b);
+void move_matrix(Matrix *src, Matrix *dst);
 
 void print_matrix(FILE *file, Matrix *matrix);
 

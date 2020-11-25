@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
+#include <math.h>
 
 #include "matrix.h"
 #include "debug.h"
@@ -140,4 +141,24 @@ Matrix *transpose(Matrix *matrix) {
         }
     }
     return res;
+}
+
+data_t distance(Matrix *a, Matrix *b) {
+#ifdef ASSERT_MATRIX_RANGES
+    assert(a->row == b->row);
+    assert(a->col == b->col);
+#endif
+    data_t sum = 0.0;
+    for (size_t i = 0; i < a->row * a->col; i++) {
+        sum += pow(a->values[i] - b->values[i], 2);
+    }
+    return sqrt(sum);
+}
+
+void move_matrix(Matrix *src, Matrix *dst) {
+#ifdef ASSERT_MATRIX_RANGES
+    assert(src->row == dst->row);
+    assert(src->col == dst->col);
+#endif
+    memcpy(src->values, dst->values, src->col * src->row * sizeof(*(src->values)));
 }
