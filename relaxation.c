@@ -59,7 +59,7 @@ Matrix *relaxation(Matrix *a, Matrix *f, data_t omega, data_t precision, size_t 
             set_element(solution_cur, i, 0, get_element(solution_cur, i, 0) + variation);
         }
 
-        iters++;
+        (*iters)++;
     } while (sqrt(distance_squared) > precision); // Оценкой точности служит |x^(k+1) - x^k| < eps
 
     free_matrix(a);
