@@ -36,7 +36,18 @@ int main(int argc, char *argv[]) {
     }
 
     if (strtoul(argv[3], NULL, 0) == 1) {
-
+        for (size_t i = 0; i < n; i++) {
+            for (size_t j = 0; j < n; j++) {
+                data_t in;
+                scanf("%" PR_DATA_T, &in);
+                set_element(a, i, j, in);
+            }
+        }
+        for (size_t i = 0; i < n; i++) {
+            data_t in;
+            scanf("%" PR_DATA_T, &in);
+            set_element(f, i, 0, in);
+        }
     } else if (strtoul(argv[3], NULL, 0) == 2) {
         size_t m = strtoul(argv[5], NULL, 0);
         for (size_t i = 0; i < n; i++) {
@@ -110,7 +121,7 @@ int main(int argc, char *argv[]) {
 
 data_t gen_function_a(size_t n, size_t m, size_t i, size_t j)
 {
-    return i == j ? n + ((data_t) m) * m + ((data_t) j) / m + ((data_t) i) / n)
+    return i == j ? n + ((data_t) m) * m + ((data_t) j) / m + ((data_t) i) / n
             : ((data_t) i + j) / (((data_t)m) + n);
 }
 
