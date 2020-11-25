@@ -6,20 +6,18 @@
 #include "algs.h"
 #include "relaxation.h"
 
-int
-main(void)
-{
-    srand (13);
+int main(void) {
+    srand(13);
     Matrix *a = new_matrix(4, 4);
     for (size_t i = 0; i < a->row; i++) {
         for (size_t j = 0; j < a->col; j++) {
-            a->values[j + a->col * i] = (double)rand() / RAND_MAX * 10.0 - 5.0;
+            a->values[j + a->col * i] = (double) rand() / RAND_MAX * 10.0 - 5.0;
         }
     }
 
     Matrix *f = new_matrix(4, 1);
     for (size_t i = 0; i < a->row; i++) {
-        f->values[i] = (double)rand() / RAND_MAX * 10.0 - 5.0;
+        f->values[i] = (double) rand() / RAND_MAX * 10.0 - 5.0;
     }
 
     printf("Матрица системы :\n");

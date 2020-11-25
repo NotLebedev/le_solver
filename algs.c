@@ -3,8 +3,6 @@
 
 #include "algs.h"
 #include "error.h"
-#include "debug.h"
-
 
 static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot);
 
@@ -132,12 +130,6 @@ Matrix *calc_inverse(Matrix *a, int *status) {
             mul_sub_row(res, i, j, -get_element(a, j, i)); // Вычитаем из всех последующих строк обеих матриц данную
             mul_sub_row(a, i, j, -get_element(a, j, i)); // домноженную на необходимый коэффициент
         }
-#ifdef PRINT_MATRIX_ELIMINATION_ITERATIONS
-        print_matrix(stderr, a);
-        fputs("\n", stderr);
-        print_matrix(stderr, res);
-        fputs("--------------------------------\n", stderr);
-#endif
     }
 
     // Обратный ход, вычитаем из всех предыдущих строк обеих матриц текущую, домноженную на необходимый коэффициент
@@ -220,14 +212,6 @@ static size_t *elimination(Matrix *a, Matrix *f, _Bool use_pivot)
             }
         }
 
-#ifdef PRINT_MATRIX_ELIMINATION_ITERATIONS
-        print_matrix(stderr, a);
-        if (f != NULL) {
-            fputs("\n", stderr);
-            print_matrix(stderr, f);
-        }
-        fputs("--------------------------------\n", stderr);
-#endif
     }
 
     free(cols_eliminated);

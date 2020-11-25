@@ -1,8 +1,7 @@
 #ifndef LE_SOLVER_ERROR_H
 #define LE_SOLVER_ERROR_H
 
-enum
-{
+enum {
     OK = 0,
     ALLOC_FAILED,
     INCORRECT_ARGS

@@ -1,14 +1,11 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include <math.h>
 
 #include "matrix.h"
 #include "debug.h"
 
-Matrix *
-new_matrix(size_t row, size_t col)
-{
+Matrix * new_matrix(size_t row, size_t col) {
     Matrix *matrix = calloc(1, sizeof(*matrix) + sizeof(data_t) * row * col);
     if (matrix == NULL) {
         return NULL;
@@ -18,9 +15,7 @@ new_matrix(size_t row, size_t col)
     return matrix;
 }
 
-void
-free_matrix(Matrix *matrix)
-{
+void free_matrix(Matrix *matrix) {
     free(matrix);
 }
 
@@ -34,9 +29,7 @@ Matrix *copy_matrix(Matrix *matrix) {
     return copy;
 }
 
-data_t
-get_element(Matrix *matrix, size_t row, size_t col)
-{
+data_t get_element(Matrix *matrix, size_t row, size_t col) {
 #ifdef ASSERT_MATRIX_RANGES
     assert(row < matrix->row);
     assert(col < matrix->col);
@@ -44,9 +37,7 @@ get_element(Matrix *matrix, size_t row, size_t col)
     return matrix->values[col + matrix->col * row];
 }
 
-void
-set_element(Matrix *matrix, size_t row, size_t col, data_t val)
-{
+void set_element(Matrix *matrix, size_t row, size_t col, data_t val) {
 #ifdef ASSERT_MATRIX_RANGES
     assert(row < matrix->row);
     assert(col < matrix->col);
@@ -54,9 +45,7 @@ set_element(Matrix *matrix, size_t row, size_t col, data_t val)
     matrix->values[col + matrix->col * row] = val;
 }
 
-void
-mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c)
-{
+void mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c) {
 #ifdef ASSERT_MATRIX_RANGES
     assert(s < matrix->row);
     assert(d < matrix->row);
@@ -66,9 +55,7 @@ mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c)
     }
 }
 
-void
-print_matrix(FILE *file, Matrix *matrix)
-{
+void print_matrix(FILE *file, Matrix *matrix) {
 #ifdef PRINT_MATRIX_HUMAN_READABLE
     for (size_t i = 0; i < matrix->row; i++) {
         for (size_t j = 0; j < matrix->col; j++) {
