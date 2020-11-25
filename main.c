@@ -20,7 +20,7 @@ data_t gen_function_f(size_t n, size_t m, size_t i);
  */
 int main(int argc, char *argv[]) {
     size_t n = strtoul(argv[4], NULL, 0);
-    mode = strtoul(argv[2], NULL, 0) - 1;
+    mode = (int)strtoul(argv[2], NULL, 0) - 1;
 
     Matrix *a = new_matrix(n, n);
     if (a == NULL) {
