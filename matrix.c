@@ -160,5 +160,5 @@ void move_matrix(Matrix *src, Matrix *dst) {
     assert(src->row == dst->row);
     assert(src->col == dst->col);
 #endif
-    memcpy(src->values, dst->values, src->col * src->row * sizeof(*(src->values)));
+    memcpy(dst->values, src->values, src->col * src->row * sizeof(*(src->values)));
 }
