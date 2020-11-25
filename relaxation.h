@@ -3,6 +3,6 @@
 
 #include "matrix.h"
 
-Matrix *relaxation(Matrix *a, Matrix *f, data_t omega, data_t precision, int *status);
+Matrix *relaxation(Matrix *a, Matrix *f, data_t omega, data_t precision, size_t *iters, int *status);
 
 #endif //LE_SOLVER_RELAXATION_H
