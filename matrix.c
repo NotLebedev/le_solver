@@ -1,11 +1,10 @@
 #include <stdlib.h>
-#include <assert.h>
 #include <string.h>
 
 #include "matrix.h"
 #include "debug.h"
 
-Matrix * new_matrix(size_t row, size_t col) {
+Matrix *new_matrix(size_t row, size_t col) {
     Matrix *matrix = calloc(1, sizeof(*matrix) + sizeof(data_t) * row * col);
     if (matrix == NULL) {
         return NULL;
@@ -30,26 +29,14 @@ Matrix *copy_matrix(Matrix *matrix) {
 }
 
 data_t get_element(Matrix *matrix, size_t row, size_t col) {
-#ifdef ASSERT_MATRIX_RANGES
-    assert(row < matrix->row);
-    assert(col < matrix->col);
-#endif
     return matrix->values[col + matrix->col * row];
 }
 
 void set_element(Matrix *matrix, size_t row, size_t col, data_t val) {
-#ifdef ASSERT_MATRIX_RANGES
-    assert(row < matrix->row);
-    assert(col < matrix->col);
-#endif
     matrix->values[col + matrix->col * row] = val;
 }
 
 void mul_sub_row(Matrix *matrix, size_t s, size_t d, data_t c) {
-#ifdef ASSERT_MATRIX_RANGES
-    assert(s < matrix->row);
-    assert(d < matrix->row);
-#endif
     for (size_t i = 0; i < matrix->col; i++) {
         matrix->values[i + d * matrix->col] += c * matrix->values[i + s * matrix->col];
     }
@@ -78,10 +65,6 @@ void print_matrix(FILE *file, Matrix *matrix) {
 }
 
 void swap_row(Matrix *matrix, size_t s, size_t d) {
-#ifdef ASSERT_MATRIX_RANGES
-    assert(s < matrix->row);
-    assert(d < matrix->row);
-#endif
     for (size_t i = 0; i < matrix->col; i++) {
         data_t tmp = matrix->values[i + d * matrix->col];
         matrix->values[i + d * matrix->col] = matrix->values[i + s * matrix->col];
@@ -90,18 +73,12 @@ void swap_row(Matrix *matrix, size_t s, size_t d) {
 }
 
 void mul_row(Matrix *matrix, size_t row, data_t c) {
-#ifdef ASSERT_MATRIX_RANGES
-    assert(row < matrix->row);
-#endif
     for (size_t i = 0; i < matrix->col; i++) {
         matrix->values[i + row * matrix->col] *= c;
     }
 }
 
 Matrix *matrix_mul(Matrix *a, Matrix *b) {
-#ifdef ASSERT_MATRIX_RANGES
-    assert(a->col == b->row);
-#endif
     Matrix *res = new_matrix(a->row, b->col);
     if (res == NULL) {
         return NULL;
