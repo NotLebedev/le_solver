@@ -17,6 +17,7 @@ data_t gen_function_f(size_t n, size_t m, size_t i);
  * Для случая задания матрицы вручную передаётся число n -- размер матрицы A и вектора-столбца f, которые
  * задаются на стандартном потоке ввода
  * Для случая генерации матрицы при помощи функции задаются два числа n и m
+ * В случае выбора метода верхней релаксации последним аргументом ожидается параметр омега
  */
 int main(int argc, char *argv[]) {
     size_t n = strtoul(argv[4], NULL, 0);
@@ -88,7 +89,18 @@ int main(int argc, char *argv[]) {
     } else if (strtoul(argv[1], NULL, 0) == 2) {
         int status;
         size_t iter;
-        print_matrix(stdout, relaxation(a, f, 1, 1e-10, &iter, &status));
+        data_t omega = strtod(argv[argc - 1], NULL);
+
+        Matrix *solution = relaxation(a, f, omega, 1e-10, &iter, &status);
+        if (status < 0) {
+            fprintf(stderr, "Ошибка во время выполнения программы\n");
+            return 1;
+        }
+
+        printf("\nРешение системы найденное методом верхней релаксации :\n");
+        print_matrix(stdout, solution);
+        printf("\nСовершено %ld итераций\n", (long) iter);
+        free_matrix(solution);
     }
 
     free_matrix(a);
@@ -98,7 +110,7 @@ int main(int argc, char *argv[]) {
 
 data_t gen_function_a(size_t n, size_t m, size_t i, size_t j)
 {
-    return i == j ? n + ((data_t) m) * m + ((data_t) j) / m + ((data_t) i) / n
+    return i == j ? n + ((data_t) m) * m + ((data_t) j) / m + ((data_t) i) / n)
             : ((data_t) i + j) / (((data_t)m) + n);
 }
 
