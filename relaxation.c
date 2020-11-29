@@ -64,5 +64,7 @@ Matrix *relaxation(Matrix *a, Matrix *f, data_t omega, data_t precision, size_t 
 
     free_matrix(a);
     free_matrix(f);
+
+    *status = OK;
     return solution_cur;
 }
