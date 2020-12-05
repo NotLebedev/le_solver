@@ -1,0 +1,131 @@
+\documentclass[a4paper,12pt,titlepage,finall]{article}
+
+\usepackage[T1,T2A]{fontenc}     % форматы шрифтов
+\usepackage[utf8]{inputenc}      % кодировка символов, используемая в данном файле
+\usepackage[russian]{babel}      % пакет русификации
+\usepackage{tikz}                % для создания иллюстраций
+\usepackage{pgfplots}            % для вывода графиков функций
+\usepackage{geometry}		     % для настройки размера полей
+\usepackage{indentfirst}         % для отступа в первом абзаце секции
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{mathtext}
+\usepackage{graphicx}
+\graphicspath{ {./} }
+
+%Настройка листингов для языка C
+\usepackage{xcolor}
+\usepackage{listings}
+
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=none,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=C,
+}
+
+\lstdefinestyle{MakeStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{mGray},
+    stringstyle=\color{mPurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=none,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    language=[gnu] make,
+}
+
+% выбираем размер листа А4, все поля ставим по 3см
+\geometry{a4paper,left=30mm,top=30mm,bottom=30mm,right=30mm}
+
+\setcounter{secnumdepth}{0}      % отключаем нумерацию секций
+%\setcounter{tocdepth}{1}
+
+\usepgfplotslibrary{fillbetween} % для изображения областей на графиках
+
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+	{\small \sc Московский государственный университет \\имени М.~В.~Ломоносова\\
+	Факультет вычислительной математики и кибернетики\\}
+	\hrulefill
+	\vfill
+	{\large \bf Компьютерный практикум по учебному курсу}\\
+	~\\
+	{\Large \bf <<ВВЕДЕНИЕ В ЧИСЛЕННЫЕ МЕТОДЫ>>}\\ 
+	~\\
+	{\Large \bf ЗАДАНИЕ № 1}\\
+	~\\
+	{\large \bf ОТЧЕТ}\\
+	{\bf о выполненном задании}\\
+	{студента 201 учебной группы факультета ВМК МГУ}\\
+	{Галустова Артемия Львовича}
+    \end{center}
+    
+    \begin{center}
+	\vfill
+	{\small гор. Москва\\2020 год}
+    \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Подвариант 1}
+\subsection{Цель работы}
+
+Изучить классический метод Гаусса (а также модифицированный метод Гаусса),
+применяемый для решения системы линейных алгебраических уравнений.
+
+\subsection{Постановка задачи}
+
+Дана система уравнений $Ax=f$ порядка $n \times n$ с невырожденной матрицей $A$. Написать
+программу, решающую систему линейных алгебраических уравнений заданного
+пользователем размера ($n$ – параметр программы) методом Гаусса и методом Гаусса с
+выбором главного элемента.
+
+\subsection{Цели и задачи практической работы}
+
+\begin{enumerate}
+\item
+Решить заданную СЛАУ методом Гаусса и методом Гаусса с выбором главного
+элемента;
+\item
+Вычислить определитель матрицы $det(A)$;
+\item
+Вычислить обратную матрицу $A^{-1}$;
+\item
+Определить число обусловленности $МA=||A|| \times ||A^{-1}||$;
+\item
+Исследовать вопрос вычислительной устойчивости метода Гаусса (при больших
+значениях параметра $n$);
+\item
+Правильность решения СЛАУ подтвердить системой тестов (использован пакет символьных вычислений Wolfaram Mathematica).
+\end{enumerate}
+\end{document}
