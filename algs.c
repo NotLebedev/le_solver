@@ -161,7 +161,7 @@ data_t calc_condition_number(Matrix *a, int *status)
 data_t matrix_norm(Matrix *a)
 {
     data_t max = 0.0;
-    // Матричная норма ||A||_1
+    // Матричная норма ||A||_l
     for (size_t i = 0; i < a->row; i++) {
         data_t sum = 0.0; // Находим сумму модулей элементов строки
         for (size_t j = 0; j < a->col; j++) {
