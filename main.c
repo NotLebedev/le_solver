@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 
     printf("Матрица системы :\n");
     print_matrix(stdout, a);
-    printf("\nМатрица-столбец коэффициентов :\n");
+    printf("\nМатрица-столбец свободных членов :\n");
     print_matrix(stdout, f);
 
     if (strtoul(argv[1], NULL, 0) == 1) {
